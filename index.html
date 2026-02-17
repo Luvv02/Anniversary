@@ -11,71 +11,90 @@
     padding: 50px;
     overflow-x: hidden;
   }
-  .header { margin-bottom: 50px; }
-  h1 { color: #ffd700; font-size: 3em; text-shadow: 2px 2px 10px rgba(255,215,0,0.5); }
-  p { font-size: 1.5em; font-style: italic; color: #eee; }
+  h1 { color: #ffd700; font-size: 3.5em; text-shadow: 2px 2px 15px rgba(255,215,0,0.6); margin-bottom: 10px; }
+  .subtext { font-size: 1.6em; font-style: italic; color: #f0f0f0; margin-bottom: 40px; font-family: 'Georgia', serif; }
+
+  /* Music Player Container */
+  #player-container {
+    margin-bottom: 40px;
+    background: rgba(255, 215, 0, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    display: inline-block;
+    border: 1px solid #ffd700;
+  }
 
   .gallery {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 30px;
-    margin-top: 40px;
+    gap: 35px;
+    margin-top: 20px;
   }
 
   .polaroid {
     background: white;
-    padding: 15px 15px 30px 15px;
-    box-shadow: 0 15px 25px rgba(0,0,0,0.7);
-    transition: transform 0.3s;
+    padding: 15px 15px 35px 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #ddd;
   }
-  .polaroid img {
-    width: 280px;
-    height: 350px;
-    object-fit: cover;
-  }
-  .caption {
-    color: #333;
-    font-family: 'Brush Script MT', cursive;
-    font-size: 1.4em;
-    margin-top: 15px;
-  }
+  .polaroid img { width: 280px; height: 350px; object-fit: cover; }
+  .caption { color: #222; font-family: 'Brush Script MT', cursive; font-size: 1.6em; margin-top: 15px; }
   
-  /* Adding some "messy" rotation for a real collage look */
-  .polaroid:nth-child(odd) { transform: rotate(-3deg); }
-  .polaroid:nth-child(even) { transform: rotate(3deg); }
-  .polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 5; }
+  .polaroid:nth-child(odd) { transform: rotate(-4deg); }
+  .polaroid:nth-child(even) { transform: rotate(4deg); }
+  .polaroid:hover { transform: scale(1.1) rotate(0deg); z-index: 10; border: 2px solid #ffd700; }
+
+  /* Animated Hearts */
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+  }
+  .heart {
+    position: fixed; bottom: -10%; color: #ff4d4d;
+    font-size: 25px; animation: floatUp 6s linear infinite; z-index: -1;
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>✨ Happy 24th Anniversary ✨</h1>
-  <p>To the best Mom & Dad in the world. Thank you for 24 years of love, guidance, and memories.</p>
-</div>
+  <div class="header">
+    <h1>✨ Happy 24th Anniversary ✨</h1>
+    <p class="subtext">"24 Years of Love, Mom & Dad"</p>
+  </div>
 
-<div class="gallery">
-  <div class="polaroid">
-    <img src="12572_0.jpg">
-    <div class="caption">Where it all began...</div>
+  <div id="player-container">
+    <p style="color: #ffd700; margin-top: 0;">Click Play for the Surprise Song 🎵</p>
+    <iframe width="300" height="80" src="https://www.youtube.com/embed/Kz_fUFJ2HEw?autoplay=0" 
+      frameborder="0" allow="autoplay; encrypted-media"></iframe>
   </div>
-  <div class="polaroid">
-    <img src="12564_0.jpg">
-    <div class="caption">Family Adventures</div>
+
+  <div class="gallery">
+    <div class="polaroid"><img src="12572_0.jpg"><div class="caption">Where it began...</div></div>
+    <div class="polaroid"><img src="12564_0.jpg"><div class="caption">Beautiful Journey</div></div>
+    <div class="polaroid"><img src="12563_0.jpg"><div class="caption">Love at the Beach</div></div>
+    <div class="polaroid"><img src="12569_0.jpg"><div class="caption">City Lights</div></div>
+    <div class="polaroid"><img src="12570_0.jpg"><div class="caption">Traditional Joy</div></div>
+    <div class="polaroid"><img src="12559_0.jpg"><div class="caption">Our Whole World</div></div>
   </div>
-  <div class="polaroid">
-    <img src="12563_0.jpg">
-    <div class="caption">Love by the Sea</div>
-  </div>
-  <div class="polaroid">
-    <img src="12569_0.jpg">
-    <div class="caption">City Lights</div>
-  </div>
-  <div class="polaroid">
-    <img src="12570_0.jpg">
-    <div class="caption">Every day is a celebration</div>
-  </div>
-</div>
+
+  <script>
+    // Create floating hearts automatically
+    function createHearts() {
+      const heartSymbols = ['❤️', '💖', '✨', '💕'];
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }, 500);
+    }
+    createHearts();
+  </script>
 
 </body>
 </html>
