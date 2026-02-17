@@ -7,62 +7,98 @@
     background: linear-gradient(-45deg, #ffc0cb, #ffffff, #ff4d4d, #ffafbd);
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
-    margin: 0; padding: 50px 10px; font-family: 'Arial', sans-serif; text-align: center;
+    margin: 0; padding: 50px 10px; font-family: 'Poppins', sans-serif; text-align: center;
     overflow-x: hidden;
   }
   @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
   
-  h1 { color: #b91d47; font-size: 3em; text-shadow: 1px 1px 2px white; }
+  h1 { color: #b91d47; font-size: 3em; text-shadow: 1px 1px 2px white; margin-top: 20px; }
 
-  /* The Surprise Button */
-  #start-button {
-    padding: 15px 30px;
-    font-size: 1.2em;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    margin: 20px;
-    font-weight: bold;
+  /* Start Button */
+  #start-btn {
+    padding: 20px 40px; font-size: 1.5em; background: #ff4d4d; color: white;
+    border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    font-weight: bold; transition: 0.3s; margin-top: 50px;
   }
+  #start-btn:hover { transform: scale(1.1); background: #d63384; }
 
-  #main-content { display: none; } /* Hidden until button is clicked */
+  #main-content { display: none; }
+
+  .audio-box { margin: 20px auto; background: rgba(255,255,255,0.8); padding: 15px; border-radius: 50px; display: inline-block; }
 
   .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
   .polaroid {
     background: white; padding: 10px 10px 30px 10px;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1); border-radius: 2px;
-    width: 240px; transition: 0.3s;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1); width: 240px; transition: 0.3s;
   }
   .polaroid img { width: 100%; height: 250px; object-fit: cover; }
   
-  .heart { position: fixed; bottom: -10%; font-size: 25px; animation: move 6s linear infinite; z-index: -1; opacity: 0.6; }
-  @keyframes move { 0% { transform: translateY(0); } 100% { transform: translateY(-110vh); } }
+  /* Floating Emojis */
+  .floating-emoji {
+    position: fixed; bottom: -10%; font-size: 30px;
+    animation: moveUp 6s linear infinite; z-index: -1; opacity: 0.7;
+  }
+  @keyframes moveUp { 
+    0% { transform: translateY(0) rotate(0); } 
+    100% { transform: translateY(-110vh) rotate(360deg); } 
+  }
 </style>
 </head>
 <body>
 
   <div id="intro">
-    <h1>A Surprise for Mom & Dad ❤️</h1>
-    <button id="start-button" onclick="startSurprise()">Click to Open Your Gift</button>
+    <h1>A Special Surprise...</h1>
+    <button id="start-btn" onclick="reveal()">Click to Open ❤️</button>
   </div>
 
   <div id="main-content">
-    <h1>Happy 24th Anniversary!</h1>
+    <h1>Happy 24th Anniversary! 🍔❤️</h1>
     
-    <div id="player"></div>
+    <div class="audio-box">
+      <audio id="mySong" controls loop>
+        <source src="song.mp3" type="audio/mpeg">
+      </audio>
+    </div>
 
     <div class="gallery" id="gallery"></div>
   </div>
 
   <script>
-    // YouTube API Setup
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    function reveal() {
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      document.getElementById('mySong').play();
+      startFloating();
+      loadPhotos();
+    }
 
-    var player;
-    function onYouTube
+    function loadPhotos() {
+      const nums = ['12558', '12559', '12560', '12561', '12562', '12563', '12564', '12565', '12566', '12567', '12568', '12569', '12570', '12571', '12572', '12573', '12574', '12575', '12576', '12577', '12578', '12579', '12580', '12581', '12582', '12583', '12584'];
+      const gal = document.getElementById('gallery');
+      nums.forEach(n => {
+        const div = document.createElement('div');
+        div.className = 'polaroid';
+        div.style.transform = `rotate(${Math.random() * 10 - 5}deg)`;
+        const img = document.createElement('img');
+        img.src = n + '_0.jpg';
+        img.onerror = function() { this.src = n + '.jpg'; };
+        div.appendChild(img);
+        gal.appendChild(div);
+      });
+    }
+
+    function startFloating() {
+      const emojis = ['❤️', '💖', '🍔', '✨', '🌹'];
+      setInterval(() => {
+        const e = document.createElement('div');
+        e.className = 'floating-emoji';
+        e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+        e.style.left = Math.random() * 100 + 'vw';
+        e.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        document.body.appendChild(e);
+        setTimeout(() => e.remove(), 6000);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
