@@ -8,6 +8,7 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: 'Segoe UI', sans-serif;
+            /* Constant Colorful Gradient Background */
             background: linear-gradient(-45deg, #ffc0cb, #ffffff, #ff4d4d, #ffafbd);
             background-size: 400% 400%;
             animation: gradientBG 10s ease infinite;
@@ -18,44 +19,50 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100%; text-align: center; z-index: 10; position: relative;
         }
-        #game-title { color: #b91d47; font-size: 2.2em; text-shadow: 2px 2px white; margin-bottom: 10px; }
-
+        
         #film-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; flex-direction: column; align-items: center; justify-content: center; z-index: 20;
-        }
-        .film-frame {
-            width: 85%; max-width: 450px; background: white; padding: 10px 10px 50px 10px;
-            box-shadow: 0 0 30px rgba(255,192,203,0.5); border-radius: 2px;
-            opacity: 0; transition: opacity 0.8s ease-in-out;
-        }
-        .film-frame img { width: 100%; height: auto; display: block; border: 1px solid #eee; }
-        
-        #final-words {
-            display: none; color: white; text-align: center; 
-            font-family: 'Georgia', serif; padding: 20px;
+            flex-direction: column; align-items: center; justify-content: center; z-index: 20;
         }
 
-        .click-target { position: absolute; cursor: pointer; font-size: 50px; user-select: none; transition: transform 0.1s; }
+        /* Container for 2 photos together */
+        .film-container {
+            display: flex; justify-content: center; gap: 20px; width: 90%;
+            opacity: 0; transition: opacity 0.8s ease-in-out;
+        }
+
+        .polaroid {
+            background: white; padding: 10px 10px 40px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 45%; max-width: 300px; transform: rotate(-2deg);
+        }
+        .polaroid:nth-child(even) { transform: rotate(3deg); }
+        .polaroid img { width: 100%; height: auto; display: block; }
+
+        #final-msg {
+            display: none; text-align: center; background: rgba(255,255,255,0.8);
+            padding: 30px; border-radius: 20px; border: 2px solid #ff4d4d;
+        }
+
+        .click-target { position: absolute; cursor: pointer; font-size: 50px; user-select: none; }
     </style>
 </head>
 <body>
 
     <div id="game-screen">
-        <h1 id="game-title">Catch 3 Hearts to Unlock! ❤️</h1>
-        <div id="score-board" style="font-size: 1.2em; color: #b91d47;">Hearts: <span id="score">0</span> / 3</div>
+        <h1 style="color: #b91d47; text-shadow: 2px 2px white;">Catch 3 Hearts to Start the Film! ❤️</h1>
+        <div style="font-size: 1.5em; color: #ff4d4d;">Score: <span id="score">0</span> / 3</div>
     </div>
 
     <div id="film-screen">
-        <div class="film-frame" id="photo-frame">
-            <img id="current-photo" src="">
-            <div style="text-align:center; font-style:italic; margin-top:15px; color: #333; font-family: Georgia;">Our Journey...</div>
+        <div class="film-container" id="photo-pair">
+            <div class="polaroid"><img id="img1" src=""></div>
+            <div class="polaroid"><img id="img2" src=""></div>
         </div>
         
-        <div id="final-words">
-            <h1 style="color: #ff4d4d; font-size: 2.5em;">Happy 24th Anniversary! ❤️🍔✨</h1>
-            <p style="font-size: 1.3em;">To the most wonderful Mom and Dad in the world.</p>
-            <p style="font-size: 1.1em; color: #ffc0cb;">24 Years of Love, Laughter, and Happiness.</p>
+        <div id="final-msg">
+            <h1 style="color: #b91d47;">Happy 24th Anniversary! ❤️</h1>
+            <p style="font-size: 1.2em;">Cheers to a lifetime of love and burgers! 🍔✨</p>
         </div>
 
         <audio id="bgSong" preload="auto">
@@ -65,75 +72,80 @@
 
     <script>
         let score = 0;
-        const requiredScore = 3; 
-        
-        // 12558 is moved to the very end
         const photoNumbers = [
-            '12559', '12560', '12561', '12562', '12563', '12564', '12565', '12566', '12567', '12568', '12569', '12570', '12571', '12572', '12558', '12546', '12547', '12548', '12549', '12550', '12551', '12552', '12553', '12554', '12555', '12556', '12557'
+            '12559', '12560', '12561', '12562', '12563', '12564', '12565', '12566', '12567', '12568', 
+            '12569', '12570', '12571', '12572', '12558', '12546', '12547', '12548', '12549', '12550', 
+            '12551', '12552', '12553', '12554', '12555', '12556', '12557'
         ];
-        let photoIndex = 0;
+        let index = 0;
 
-        function createEmoji() {
-            if (score >= requiredScore) return;
-            const emoji = document.createElement('div');
-            emoji.innerHTML = Math.random() > 0.3 ? '❤️' : '🍔';
-            emoji.className = 'click-target';
-            emoji.style.left = Math.random() * 80 + 10 + 'vw';
-            emoji.style.top = Math.random() * 80 + 10 + 'vh';
-            
-            emoji.onclick = () => {
-                if (emoji.innerHTML === '❤️') {
+        // Game Logic
+        function spawn() {
+            if (score >= 3) return;
+            const e = document.createElement('div');
+            e.innerHTML = Math.random() > 0.3 ? '❤️' : '🍔';
+            e.className = 'click-target';
+            e.style.left = Math.random() * 80 + 10 + 'vw';
+            e.style.top = Math.random() * 80 + 10 + 'vh';
+            e.onclick = () => {
+                if(e.innerHTML === '❤️') {
                     score++;
                     document.getElementById('score').innerText = score;
-                    if (score >= requiredScore) startFilm();
+                    if(score >= 3) startShow();
                 }
-                emoji.remove();
+                e.remove();
             };
-            document.getElementById('game-screen').appendChild(emoji);
-            setTimeout(() => { if(emoji.parentNode) emoji.remove(); }, 2000);
+            document.getElementById('game-screen').appendChild(e);
+            setTimeout(() => e.remove(), 2000);
         }
+        setInterval(spawn, 700);
 
-        setInterval(createEmoji, 700);
-
-        function startFilm() {
+        function startShow() {
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('film-screen').style.display = 'flex';
-            const audio = document.getElementById('bgSong');
-            audio.play().catch(e => {
-                document.body.addEventListener('click', () => audio.play(), {once: true});
+            
+            // START MUSIC IMMEDIATELY
+            const song = document.getElementById('bgSong');
+            song.play().catch(() => {
+                // If browser blocks it, play on next click
+                document.body.onclick = () => song.play();
             });
-            playNextPhoto();
+
+            playFilm();
         }
 
-        function playNextPhoto() {
-            const frame = document.getElementById('photo-frame');
-            const img = document.getElementById('current-photo');
+        function playFilm() {
+            const container = document.getElementById('photo-pair');
+            const i1 = document.getElementById('img1');
+            const i2 = document.getElementById('img2');
 
-            if (photoIndex >= photoNumbers.length) {
-                frame.style.display = 'none';
-                document.getElementById('final-words').style.display = 'block';
+            if (index >= photoNumbers.length) {
+                container.style.display = 'none';
+                document.getElementById('final-msg').style.display = 'block';
                 return;
             }
 
-            frame.style.opacity = '0';
-            
+            container.style.opacity = '0';
+
             setTimeout(() => {
-                const num = photoNumbers[photoIndex];
-                img.src = num + '_0.jpg';
+                // Set first photo
+                i1.src = photoNumbers[index] + '_0.jpg';
+                i1.onerror = () => i1.src = photoNumbers[index] + '.jpg';
                 
-                img.onload = () => {
-                    frame.style.opacity = '1';
-                    photoIndex++;
-                    setTimeout(playNextPhoto, 3000); 
-                };
-                
-                img.onerror = () => {
-                    img.src = num + '.jpg';
-                    img.onerror = () => {
-                        photoIndex++;
-                        playNextPhoto();
-                    };
-                };
+                // Set second photo (if available)
+                if(photoNumbers[index+1]) {
+                    i2.parentNode.style.display = 'block';
+                    i2.src = photoNumbers[index+1] + '_0.jpg';
+                    i2.onerror = () => i2.src = photoNumbers[index+1] + '.jpg';
+                } else {
+                    i2.parentNode.style.display = 'none'; // Only one photo left for the end
+                }
+
+                setTimeout(() => {
+                    container.style.opacity = '1';
+                    index += 2; // Skip by 2 because we show two at a time
+                    setTimeout(playFilm, 4000);
+                }, 500);
             }, 800);
         }
     </script>
