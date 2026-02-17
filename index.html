@@ -3,162 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>24 Years of Love - Surprise</title>
+    <title>24 Years of Love</title>
     <style>
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(-45deg, #ffc0cb, #ffffff, #ff4d4d, #ffafbd);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            animation: gradientBG 10s ease infinite;
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* Game Screen */
         #game-screen {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100%; text-align: center; z-index: 10; position: relative;
         }
-        #game-title { color: #b91d47; font-size: 2.5em; text-shadow: 2px 2px white; margin-bottom: 10px; }
-        #game-desc { font-size: 1.2em; color: #333; margin-bottom: 20px; background: rgba(255,255,255,0.6); padding: 10px 20px; border-radius: 30px; }
-        #score-board { font-size: 1.5em; font-weight: bold; color: #ff4d4d; }
+        #game-title { color: #b91d47; font-size: 2.2em; text-shadow: 2px 2px white; margin-bottom: 10px; }
 
-        /* Film Screen */
         #film-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); flex-direction: column; align-items: center; justify-content: center; z-index: 20;
+            background: #000; flex-direction: column; align-items: center; justify-content: center; z-index: 20;
         }
         .film-frame {
-            width: 80%; max-width: 500px; background: white; padding: 15px 15px 60px 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-radius: 5px;
-            position: relative; transition: opacity 1s ease-in-out;
+            width: 85%; max-width: 450px; background: white; padding: 10px 10px 50px 10px;
+            box-shadow: 0 0 30px rgba(255,192,203,0.5); border-radius: 2px;
+            opacity: 0; transition: opacity 0.8s ease-in-out;
         }
-        .film-frame img { width: 100%; height: auto; display: block; }
-        .film-caption {
-            position: absolute; bottom: 15px; left: 0; width: 100%;
-            text-align: center; font-family: 'Georgia', serif; font-style: italic; font-size: 1.2em; color: #333;
+        .film-frame img { width: 100%; height: auto; display: block; border: 1px solid #eee; }
+        
+        #final-words {
+            display: none; color: white; text-align: center; 
+            font-family: 'Georgia', serif; padding: 20px;
         }
 
-        /* Interactive Elements */
-        .click-target {
-            position: absolute; cursor: pointer; font-size: 40px; user-select: none;
-            transition: transform 0.2s;
-        }
-        .click-target:hover { transform: scale(1.3); }
-
-        #final-msg {
-            display: none; color: white; font-size: 2em; text-align: center; margin-top: 20px;
-        }
+        .click-target { position: absolute; cursor: pointer; font-size: 50px; user-select: none; transition: transform 0.1s; }
     </style>
 </head>
 <body>
 
     <div id="game-screen">
-        <h1 id="game-title">How much do you love each other? ❤️</h1>
-        <p id="game-desc">Catch 5 Hearts to unlock your 24-year Journey!</p>
-        <div id="score-board">Hearts Collected: <span id="score">0</span> / 5</div>
+        <h1 id="game-title">Catch 3 Hearts to Unlock! ❤️</h1>
+        <div id="score-board" style="font-size: 1.2em; color: #b91d47;">Hearts: <span id="score">0</span> / 3</div>
     </div>
 
     <div id="film-screen">
         <div class="film-frame" id="photo-frame">
-            <img id="current-photo" src="" alt="Memory">
-            <div class="film-caption">24 Years of Memories...</div>
+            <img id="current-photo" src="">
+            <div style="text-align:center; font-style:italic; margin-top:15px; color: #333; font-family: Georgia;">Our Journey...</div>
         </div>
-        <h2 id="final-msg">Happy 24th Anniversary, Mom & Dad! ❤️🍔</h2>
-        <audio id="bgSong" loop src="song.mp3"></audio>
+        
+        <div id="final-words">
+            <h1 style="color: #ff4d4d; font-size: 2.5em;">Happy 24th Anniversary! ❤️🍔✨</h1>
+            <p style="font-size: 1.3em;">To the most wonderful Mom and Dad in the world.</p>
+            <p style="font-size: 1.1em; color: #ffc0cb;">24 Years of Love, Laughter, and Happiness.</p>
+        </div>
+
+        <audio id="bgSong" preload="auto">
+            <source src="Saiyaara X Aashiqui 2 Mashup _ Arijit Singh _ Faheem Abdullah _ Abyss Mashup.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
     <script>
         let score = 0;
-        const requiredScore = 5;
-        const gameScreen = document.getElementById('game-screen');
-        const filmScreen = document.getElementById('film-screen');
-        const scoreDisplay = document.getElementById('score');
-        const photoEl = document.getElementById('current-photo');
-        const audio = document.getElementById('bgSong');
-
-        // Photo list from your uploaded numbers
+        const requiredScore = 3; 
+        
+        // 12558 is moved to the very end
         const photoNumbers = [
-            '12559', '12576', '12560', '12561', '12562', '12563', '12564', 
-            '12565', '12566', '12567', '12568', '12569', '12570', '12571', 
-            '12572', '12573', '12574', '12575', '12558', '12577', '12578', 
-            '12579', '12580', '12581', '12582', '12583', '12584'
+            '12559', '12560', '12561', '12562', '12563', '12564', '12565', '12566', '12567', '12568', '12569', '12570', '12571', '12572', '12558', '12546', '12547', '12548', '12549', '12550', '12551', '12552', '12553', '12554', '12555', '12556', '12557'
         ];
         let photoIndex = 0;
 
-        // --- GAME LOGIC ---
         function createEmoji() {
             if (score >= requiredScore) return;
             const emoji = document.createElement('div');
-            const isHeart = Math.random() > 0.3; // 70% chance it's a heart
-            emoji.innerHTML = isHeart ? '❤️' : '🍔';
+            emoji.innerHTML = Math.random() > 0.3 ? '❤️' : '🍔';
             emoji.className = 'click-target';
-            emoji.style.left = Math.random() * 90 + 'vw';
-            emoji.style.top = Math.random() * 90 + 'vh';
+            emoji.style.left = Math.random() * 80 + 10 + 'vw';
+            emoji.style.top = Math.random() * 80 + 10 + 'vh';
             
             emoji.onclick = () => {
-                if (isHeart) {
+                if (emoji.innerHTML === '❤️') {
                     score++;
-                    scoreDisplay.innerText = score;
-                    emoji.innerHTML = '✨';
-                    setTimeout(() => emoji.remove(), 200);
+                    document.getElementById('score').innerText = score;
                     if (score >= requiredScore) startFilm();
-                } else {
-                    // It's a burger! Just a fun distraction
-                    emoji.style.transform = 'scale(2)';
-                    setTimeout(() => emoji.style.transform = 'scale(1)', 200);
                 }
+                emoji.remove();
             };
-            
-            gameScreen.appendChild(emoji);
-            // Remove after a few seconds if not clicked
-            setTimeout(() => { if(emoji.parentNode) emoji.remove(); }, 3000);
+            document.getElementById('game-screen').appendChild(emoji);
+            setTimeout(() => { if(emoji.parentNode) emoji.remove(); }, 2000);
         }
 
-        setInterval(createEmoji, 800);
+        setInterval(createEmoji, 700);
 
-        // --- FILM LOGIC ---
         function startFilm() {
-            gameScreen.style.display = 'none';
-            filmScreen.style.display = 'flex';
-            audio.play();
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('film-screen').style.display = 'flex';
+            const audio = document.getElementById('bgSong');
+            audio.play().catch(e => {
+                document.body.addEventListener('click', () => audio.play(), {once: true});
+            });
             playNextPhoto();
         }
 
         function playNextPhoto() {
+            const frame = document.getElementById('photo-frame');
+            const img = document.getElementById('current-photo');
+
             if (photoIndex >= photoNumbers.length) {
-                document.getElementById('photo-frame').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('final-msg').style.display = 'block';
-                }, 1000);
+                frame.style.display = 'none';
+                document.getElementById('final-words').style.display = 'block';
                 return;
             }
 
-            const num = photoNumbers[photoIndex];
-            const frame = document.getElementById('photo-frame');
+            frame.style.opacity = '0';
             
-            // Try loading the photo with error handling
-            const img = new Image();
-            img.src = num + '_0.jpg';
-            
-            img.onload = () => {
-                frame.style.opacity = '0';
-                setTimeout(() => {
-                    photoEl.src = img.src;
+            setTimeout(() => {
+                const num = photoNumbers[photoIndex];
+                img.src = num + '_0.jpg';
+                
+                img.onload = () => {
                     frame.style.opacity = '1';
                     photoIndex++;
-                    setTimeout(playNextPhoto, 4000); // Wait 4 seconds per photo
-                }, 1000);
-            };
-
-            img.onerror = () => {
-                // Try alternate format if _0.jpg fails
-                img.src = num + '.jpg';
-                img.onerror = () => {
-                    photoIndex++; // Skip if photo doesn't exist
-                    playNextPhoto();
+                    setTimeout(playNextPhoto, 3000); 
                 };
-            };
+                
+                img.onerror = () => {
+                    img.src = num + '.jpg';
+                    img.onerror = () => {
+                        photoIndex++;
+                        playNextPhoto();
+                    };
+                };
+            }, 800);
         }
     </script>
 </body>
