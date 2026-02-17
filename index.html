@@ -4,96 +4,91 @@
 <title>Happy 24th Anniversary!</title>
 <style>
   body {
-    background: #0f0f0f;
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
-    text-align: center;
-    padding: 50px;
+    /* Pink, White, and Red Gradient */
+    background: linear-gradient(-45deg, #ffc0cb, #ffffff, #ff4d4d, #ffafbd);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    margin: 0; padding: 50px 10px; font-family: 'Poppins', sans-serif; text-align: center;
     overflow-x: hidden;
   }
-  h1 { color: #ffd700; font-size: 3.5em; text-shadow: 2px 2px 15px rgba(255,215,0,0.6); margin-bottom: 10px; }
-  .subtext { font-size: 1.6em; font-style: italic; color: #f0f0f0; margin-bottom: 40px; font-family: 'Georgia', serif; }
-
-  /* Music Player Container */
-  #player-container {
-    margin-bottom: 40px;
-    background: rgba(255, 215, 0, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    display: inline-block;
-    border: 1px solid #ffd700;
-  }
-
-  .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 35px;
-    margin-top: 20px;
-  }
-
-  .polaroid {
-    background: white;
-    padding: 15px 15px 35px 15px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid #ddd;
-  }
-  .polaroid img { width: 280px; height: 350px; object-fit: cover; }
-  .caption { color: #222; font-family: 'Brush Script MT', cursive; font-size: 1.6em; margin-top: 15px; }
+  @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
   
-  .polaroid:nth-child(odd) { transform: rotate(-4deg); }
-  .polaroid:nth-child(even) { transform: rotate(4deg); }
-  .polaroid:hover { transform: scale(1.1) rotate(0deg); z-index: 10; border: 2px solid #ffd700; }
+  h1 { color: #b91d47; font-size: 3.5em; text-shadow: 1px 1px 2px white; margin-bottom: 10px; }
 
-  /* Animated Hearts */
-  @keyframes floatUp {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+  .poem-container {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 30px; border-radius: 20px; display: inline-block;
+    margin-bottom: 40px; border: 2px solid #ff4d4d; max-width: 85%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
-  .heart {
-    position: fixed; bottom: -10%; color: #ff4d4d;
-    font-size: 25px; animation: floatUp 6s linear infinite; z-index: -1;
+  .poem { font-family: 'Georgia', serif; font-style: italic; font-size: 1.4em; line-height: 1.8; color: #333; }
+
+  /* Music Box */
+  #player-box { margin-bottom: 30px; position: sticky; top: 10px; z-index: 1000; }
+
+  .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 20px; }
+  
+  .polaroid {
+    background: white; padding: 12px 12px 35px 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15); border-radius: 2px;
+    transition: 0.4s; width: 260px;
   }
+  .polaroid img { width: 100%; height: 280px; object-fit: cover; background: #f9f9f9; }
+  .polaroid:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 10; box-shadow: 0 15px 35px rgba(255, 77, 77, 0.4); }
+  
+  .heart { position: fixed; bottom: -10%; font-size: 25px; animation: move 6s linear infinite; z-index: -1; opacity: 0.6; }
+  @keyframes move { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-110vh) rotate(360deg); } }
 </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>✨ Happy 24th Anniversary ✨</h1>
-    <p class="subtext">"24 Years of Love, Mom & Dad"</p>
+  <div id="player-box">
+    <iframe width="320" height="60" src="https://www.youtube.com/embed/Kz_fUFJ2HEw" frameborder="0" allow="autoplay"></iframe>
+    <p style="color: #b91d47; font-weight: bold;">Click Play for the Music 🎵</p>
   </div>
 
-  <div id="player-container">
-    <p style="color: #ffd700; margin-top: 0;">Click Play for the Surprise Song 🎵</p>
-    <iframe width="300" height="80" src="https://www.youtube.com/embed/Kz_fUFJ2HEw?autoplay=0" 
-      frameborder="0" allow="autoplay; encrypted-media"></iframe>
+  <h1>24 Years of Togetherness ❤️</h1>
+  
+  <div class="poem-container">
+    <div class="poem">
+      Two hearts, one soul, a journey so bright,<br>
+      Through twenty-four years of warmth and light.<br>
+      Through laughter and tears, you stood side by side,<br>
+      With love as your compass and grace as your guide.<br><br>
+      Happy Anniversary, Mom & Dad!
+    </div>
   </div>
 
-  <div class="gallery">
-    <div class="polaroid"><img src="12572_0.jpg"><div class="caption">Where it began...</div></div>
-    <div class="polaroid"><img src="12564_0.jpg"><div class="caption">Beautiful Journey</div></div>
-    <div class="polaroid"><img src="12563_0.jpg"><div class="caption">Love at the Beach</div></div>
-    <div class="polaroid"><img src="12569_0.jpg"><div class="caption">City Lights</div></div>
-    <div class="polaroid"><img src="12570_0.jpg"><div class="caption">Traditional Joy</div></div>
-    <div class="polaroid"><img src="12559_0.jpg"><div class="caption">Our Whole World</div></div>
-  </div>
+  <div id="image-gallery" class="gallery"></div>
 
   <script>
-    // Create floating hearts automatically
-    function createHearts() {
-      const heartSymbols = ['❤️', '💖', '✨', '💕'];
-      setInterval(() => {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
-      }, 500);
-    }
-    createHearts();
+    // List of your 27 photos
+    const myPhotos = [
+      '12559_0.jpg', '12563_0.jpg', '12564_0.jpg', '12569_0.jpg', '12570_0.jpg', '12572_0.jpg',
+      '12558_0.jpg', '12560_0.jpg', '12561_0.jpg', '12562_0.jpg', '12565_0.jpg', '12566_0.jpg',
+      '12567_0.jpg', '12568_0.jpg', '12571_0.jpg', '12573_0.jpg', '12574_0.jpg', '12575_0.jpg',
+      '12576_0.jpg', '12577_0.jpg', '12578_0.jpg', '12579_0.jpg', '12580_0.jpg', '12581_0.jpg',
+      '12582_0.jpg', '12583_0.jpg', '12584_0.jpg'
+    ];
+
+    const container = document.getElementById('image-gallery');
+
+    myPhotos.forEach(file => {
+      const card = document.createElement('div');
+      card.className = 'polaroid';
+      card.style.transform = `rotate(${Math.random() * 10 - 5}deg)`;
+      // This line will hide the frame if the photo is missing
+      card.innerHTML = `<img src="${file}" onerror="this.parentElement.style.display='none'">`;
+      container.appendChild(card);
+    });
+
+    setInterval(() => {
+      const h = document.createElement('div');
+      h.className = 'heart'; h.innerHTML = '❤️';
+      h.style.left = Math.random() * 100 + 'vw';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 6000);
+    }, 450);
   </script>
 
 </body>
