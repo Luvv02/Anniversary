@@ -14,25 +14,23 @@
   
   h1 { color: #b91d47; font-size: 3em; text-shadow: 1px 1px 2px white; }
 
-  .poem-container {
-    background: rgba(255, 255, 255, 0.7);
-    padding: 25px; border-radius: 20px; display: inline-block;
-    margin-bottom: 30px; border: 2px solid #ff4d4d; max-width: 85%;
-  }
-  .poem { font-family: 'Georgia', serif; font-style: italic; font-size: 1.2em; line-height: 1.6; color: #333; }
-
-  /* Music Box */
-  .music-control {
-    margin: 20px auto;
-    padding: 15px;
-    background: white;
+  /* The Surprise Button */
+  #start-button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
     border-radius: 50px;
-    display: inline-block;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    margin: 20px;
+    font-weight: bold;
   }
+
+  #main-content { display: none; } /* Hidden until button is clicked */
 
   .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
-  
   .polaroid {
     background: white; padding: 10px 10px 30px 10px;
     box-shadow: 0 8px 15px rgba(0,0,0,0.1); border-radius: 2px;
@@ -46,61 +44,25 @@
 </head>
 <body>
 
-  <h1>Happy 24th Anniversary ❤️</h1>
-  
-  <div class="music-control">
-    <p style="color: #b91d47; margin: 0 0 5px 0; font-size: 0.9em;">Click play to start the song 🎵</p>
-    <iframe width="280" height="60" src="https://www.youtube.com/embed/Kz_fUFJ2HEw" frameborder="0" allow="autoplay"></iframe>
+  <div id="intro">
+    <h1>A Surprise for Mom & Dad ❤️</h1>
+    <button id="start-button" onclick="startSurprise()">Click to Open Your Gift</button>
   </div>
 
-  <div class="poem-container">
-    <div class="poem">
-      Two hearts, one soul, a journey so bright,<br>
-      Through twenty-four years of warmth and light.<br>
-      Happy Anniversary, Mom & Dad!
-    </div>
-  </div>
+  <div id="main-content">
+    <h1>Happy 24th Anniversary!</h1>
+    
+    <div id="player"></div>
 
-  <div id="gallery" class="gallery"></div>
+    <div class="gallery" id="gallery"></div>
+  </div>
 
   <script>
-    // These are the numbers from your GitHub files
-    const photoNumbers = [
-      '12558', '12559', '12560', '12561', '12562', '12563', '12564', 
-      '12565', '12566', '12567', '12568', '12569', '12570', '12571', 
-      '12572', '12573', '12574', '12575', '12576', '12577', '12578', 
-      '12579', '12580', '12581', '12582', '12583', '12584'
-    ];
+    // YouTube API Setup
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    const gal = document.getElementById('gallery');
-
-    photoNumbers.forEach(num => {
-      const card = document.createElement('div');
-      card.className = 'polaroid';
-      card.style.transform = `rotate(${Math.random() * 8 - 4}deg)`;
-      
-      const img = document.createElement('img');
-      // This checks every possible way you might have named the files
-      const suffixes = ['_0.jpg', '_0.JPG', '.jpg', '.JPG', '.png'];
-      let sIndex = 0;
-
-      function tryLoad() {
-        img.src = num + suffixes[sIndex];
-      }
-
-      img.onerror = function() {
-        sIndex++;
-        if (sIndex < suffixes.length) {
-          tryLoad();
-        } else {
-          card.style.display = 'none'; // Only hide if NONE of the names work
-        }
-      };
-
-      tryLoad();
-      card.appendChild(img);
-      gal.appendChild(card);
-    });
-
-    setInterval(() => {
-      const h = document.createElement
+    var player;
+    function onYouTube
