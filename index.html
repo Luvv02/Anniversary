@@ -7,62 +7,64 @@
     background: linear-gradient(-45deg, #ffc0cb, #ffffff, #ff4d4d, #ffafbd);
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
-    margin: 0; padding: 50px 10px; font-family: 'Poppins', sans-serif; text-align: center;
+    margin: 0; padding: 50px 10px; font-family: 'Arial', sans-serif; text-align: center;
     overflow-x: hidden;
   }
   @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
   
-  h1 { color: #b91d47; font-size: 3.5em; text-shadow: 1px 1px 2px white; margin-bottom: 10px; }
+  h1 { color: #b91d47; font-size: 3em; text-shadow: 1px 1px 2px white; }
 
   .poem-container {
     background: rgba(255, 255, 255, 0.7);
-    padding: 30px; border-radius: 20px; display: inline-block;
-    margin-bottom: 40px; border: 2px solid #ff4d4d; max-width: 85%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 25px; border-radius: 20px; display: inline-block;
+    margin-bottom: 30px; border: 2px solid #ff4d4d; max-width: 85%;
   }
-  .poem { font-family: 'Georgia', serif; font-style: italic; font-size: 1.4em; line-height: 1.8; color: #333; }
+  .poem { font-family: 'Georgia', serif; font-style: italic; font-size: 1.2em; line-height: 1.6; color: #333; }
 
-  .audio-box { margin-bottom: 30px; background: white; padding: 15px; display: inline-block; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+  /* Music Box */
+  .music-control {
+    margin: 20px auto;
+    padding: 15px;
+    background: white;
+    border-radius: 50px;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
 
-  .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 20px; }
+  .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
   
   .polaroid {
-    background: white; padding: 12px 12px 35px 12px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15); border-radius: 2px;
-    transition: 0.4s; width: 260px;
+    background: white; padding: 10px 10px 30px 10px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1); border-radius: 2px;
+    width: 240px; transition: 0.3s;
   }
-  .polaroid img { width: 100%; height: 280px; object-fit: cover; background: #f9f9f9; }
-  .polaroid:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 10; border: 2px solid #ff4d4d; }
+  .polaroid img { width: 100%; height: 250px; object-fit: cover; }
   
   .heart { position: fixed; bottom: -10%; font-size: 25px; animation: move 6s linear infinite; z-index: -1; opacity: 0.6; }
-  @keyframes move { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-110vh) rotate(360deg); } }
+  @keyframes move { 0% { transform: translateY(0); } 100% { transform: translateY(-110vh); } }
 </style>
 </head>
-<body onclick="document.getElementById('bgSong').play()">
+<body>
 
-  <h1>24 Years of Togetherness ❤️</h1>
+  <h1>Happy 24th Anniversary ❤️</h1>
   
-  <div class="audio-box">
-    <p style="color: #b91d47; margin: 0 0 10px 0; font-weight: bold;">🎵 Tap anywhere to start the surprise song 🎵</p>
-    <audio id="bgSong" loop>
-      <source src="song.mp3" type="audio/mpeg">
-    </audio>
+  <div class="music-control">
+    <p style="color: #b91d47; margin: 0 0 5px 0; font-size: 0.9em;">Click play to start the song 🎵</p>
+    <iframe width="280" height="60" src="https://www.youtube.com/embed/Kz_fUFJ2HEw" frameborder="0" allow="autoplay"></iframe>
   </div>
 
   <div class="poem-container">
     <div class="poem">
       Two hearts, one soul, a journey so bright,<br>
       Through twenty-four years of warmth and light.<br>
-      Through laughter and tears, you stood side by side,<br>
-      With love as your compass and grace as your guide.<br><br>
       Happy Anniversary, Mom & Dad!
     </div>
   </div>
 
-  <div id="image-gallery" class="gallery"></div>
+  <div id="gallery" class="gallery"></div>
 
   <script>
-    // These are your 27 photos based on the numbers you gave
+    // These are the numbers from your GitHub files
     const photoNumbers = [
       '12558', '12559', '12560', '12561', '12562', '12563', '12564', 
       '12565', '12566', '12567', '12568', '12569', '12570', '12571', 
@@ -70,40 +72,35 @@
       '12579', '12580', '12581', '12582', '12583', '12584'
     ];
 
-    const container = document.getElementById('image-gallery');
+    const gal = document.getElementById('gallery');
 
     photoNumbers.forEach(num => {
       const card = document.createElement('div');
       card.className = 'polaroid';
-      card.style.transform = `rotate(${Math.random() * 10 - 5}deg)`;
+      card.style.transform = `rotate(${Math.random() * 8 - 4}deg)`;
       
       const img = document.createElement('img');
-      // This will try different versions of your filenames automatically
-      const formats = ['_0.jpg', '_0.JPG', '.jpg', '.JPG'];
-      let currentFormat = 0;
-      img.src = num + formats[currentFormat];
-      
+      // This checks every possible way you might have named the files
+      const suffixes = ['_0.jpg', '_0.JPG', '.jpg', '.JPG', '.png'];
+      let sIndex = 0;
+
+      function tryLoad() {
+        img.src = num + suffixes[sIndex];
+      }
+
       img.onerror = function() {
-        currentFormat++;
-        if (currentFormat < formats.length) {
-          this.src = num + formats[currentFormat];
+        sIndex++;
+        if (sIndex < suffixes.length) {
+          tryLoad();
         } else {
-          this.parentElement.style.display = 'none'; // Hide if file not found
+          card.style.display = 'none'; // Only hide if NONE of the names work
         }
       };
 
+      tryLoad();
       card.appendChild(img);
-      container.appendChild(card);
+      gal.appendChild(card);
     });
 
     setInterval(() => {
-      const h = document.createElement('div');
-      h.className = 'heart'; h.innerHTML = '❤️';
-      h.style.left = Math.random() * 100 + 'vw';
-      document.body.appendChild(h);
-      setTimeout(() => h.remove(), 6000);
-    }, 450);
-  </script>
-
-</body>
-</html>
+      const h = document.createElement
